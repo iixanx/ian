@@ -10,18 +10,21 @@ export default function Signin() {
       <Container>
         <Header>
           <H1>Sign In</H1>
-          <Line percent={0.25} />
+          <Line />
         </Header>
         <Form>
-          <Input label="Account" />
-          <Input label="Password" />
+          <Input label="Account"/>
+          <Input label="Password" type="password" />
         </Form>
         <Submit>
-          <Button text="sign in" size={72} url="main" />
-          <Description
-            text="Don't have an account?"
-            href={`${process.env.BASE_URL}/signup`}
+          <Button
+            text="sign in"
+            size={72}
+            onClick={() => {
+              return (window.location.href = "/home");
+            }}
           />
+          <Description href={`/signup`}>Don't have an account?</Description>
         </Submit>
       </Container>
     </Wrapper>
@@ -66,7 +69,7 @@ const H1 = styled.h1`
   font-size: 4ch;
 `;
 
-const Line = styled.div<{ percent: number }>`
+const Line = styled.div`
   width: 72vw;
   height: 0.2vh;
   border-radius: 8px;
@@ -80,12 +83,10 @@ const Submit = styled.div`
   height: 16vh;
 `;
 
-const Description = styled.a<{ text: string }>`
-  width: 72vw;
-  height: 4vh;
-  font-size: 0.5ch;
+const Description = styled.a`
+  margin-top: 2vh;
   font-weight: 100;
+  font-size: 0.5ch;
   text-align: center;
   color: #fff;
-  margin-top: 2vh;
 `;

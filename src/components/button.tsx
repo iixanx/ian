@@ -1,28 +1,44 @@
-import { redirect } from "react-router-dom";
 import styled from "styled-components";
 
 export const Button = ({
   text,
   size,
-  url,
+  onClick,
+  color,
+  fontColor
 }: {
   text: string;
   size: number;
-  url: string;
+  onClick: Function;
+  fontColor?: string;
+  color?: string;
 }) => {
   return (
-    <ButtonCss size={size} onClick={() => window.location.replace(url)}>
+    <ButtonWrapper
+      size={size}
+      onClick={() => {
+        onClick();
+      }}
+      color={color}
+      fontColor={fontColor}
+    >
       {text}
-    </ButtonCss>
+    </ButtonWrapper>
   );
 };
 
-const ButtonCss = styled.button<{ size: number }>`
+const ButtonWrapper = styled.button<{
+  size: number;
+  color?: string;
+  fontColor?: string;
+}>`
   width: ${(size) => `${size.size}vw`};
   height: 5vh;
   text-align: center;
-  background-color: #396b76;
-  color: #fff;
+  background-color: ${(color) =>
+    `#${typeof color.color == "undefined" ? "1A1D1E" : color.color}`};
+  color: ${(fontColor) =>
+    `#${typeof fontColor.fontColor == "undefined" ? "396b76" : fontColor.fontColor}`};
   border-radius: 8px;
   margin-top: 5vh;
 `;

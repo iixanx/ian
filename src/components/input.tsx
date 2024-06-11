@@ -1,12 +1,12 @@
 import styled from "styled-components";
 
-export const Input = ({ label, ...props }: { label: string }) => {
+export const Input = ({ label, ...props }: { label: string, type?: string }) => {
   return (
     <Wrapper>
       <Label>{label}</Label>
-      <Form
+      <InputWrapper
         placeholder={`Please enter the ${label.toLowerCase()}`}
-        {...props}
+        type={props.type ?? 'text'}
       />
     </Wrapper>
   );
@@ -20,6 +20,8 @@ const Wrapper = styled.div`
 `;
 
 const Label = styled.label`
+  font-weight: 500;
+  font-size: 4vw;
   justify-content: left;
   flex-direction: column;
   display: flex;
@@ -27,10 +29,11 @@ const Label = styled.label`
   margin-bottom: 1vh;
 `;
 
-const Form = styled.input`
-  color: #b8b8b8;
+const InputWrapper = styled.input<{type: string}>`
   width: 72vw;
   height: 5vh;
+  border-style: none;
   border-radius: 8px;
   padding: 4%;
+  font-size: 4vw;
 `;

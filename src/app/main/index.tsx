@@ -7,7 +7,11 @@ export default function Main() {
     <Wrapper>
       <Container>
         <Image src={CommonImages.IAN_Logo}></Image>
-        <Button text="Get Start" size={50} url="signin" />
+        <Button
+          text="Get Start"
+          size={50}
+          onClick={() => (window.location.href = "/signin")}
+        />
       </Container>
       <Copyright>2024@Copyright IAN.co</Copyright>
     </Wrapper>
