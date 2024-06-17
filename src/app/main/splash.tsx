@@ -2,11 +2,11 @@ import styled from "styled-components";
 import { CommonImages } from "../../assets/common";
 import { Button } from "../../components/button";
 
-export default function Main() {
+export default function Splash() {
   return (
     <Wrapper>
       <Container>
-        <Image src={CommonImages.IAN_Logo}></Image>
+        <Image src={CommonImages.IAN_Logo} />
         <Button
           text="Get Start"
           size={50}

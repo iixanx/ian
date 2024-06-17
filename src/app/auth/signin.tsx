@@ -1,10 +1,11 @@
 import styled from "styled-components";
 import { Button } from "../../components/button";
 import { Input } from "../../components/input";
+import { useNavigate } from "react-router-dom";
 
 export default function Signin() {
-  // TODO: line 15 => 비밀번호 입력이 보이지 않도록 & type == password일 경우 오른쪽에 visible icon 추가, 클릭 시마다 상태 변화
-  // TODO: Description의 텍스트가 보이지 않음
+  const nav = useNavigate()
+
   return (
     <Wrapper>
       <Container>
@@ -13,7 +14,7 @@ export default function Signin() {
           <Line />
         </Header>
         <Form>
-          <Input label="Account"/>
+          <Input label="Account" />
           <Input label="Password" type="password" />
         </Form>
         <Submit>
@@ -21,7 +22,7 @@ export default function Signin() {
             text="sign in"
             size={72}
             onClick={() => {
-              return (window.location.href = "/home");
+              return nav("/home");
             }}
           />
           <Description href={`/signup`}>Don't have an account?</Description>

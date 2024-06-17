@@ -1,5 +1,13 @@
 import styled from "styled-components";
 
+/**
+ * 
+ * @param width 길이
+ * @param dir 방향 (column: 가로, row: 세로)
+ * @param color 색상
+ * @param position 뭘까 
+ * @returns 
+ */
 export const Line = ({ width, dir, color, position }: LineStyleProps) => {
   return (
     <LineStyle width={width} dir={dir} color={color} position={position} />
@@ -9,10 +17,10 @@ export const Line = ({ width, dir, color, position }: LineStyleProps) => {
 const LineStyle = styled.div<LineStyleProps>`
   flex-direction: ${(dir) => `${dir.dir}`};
   width: ${(props) => {
-    return props.dir == "column" ? `${props.width}vw` : `0.2vh`;
+    return props.dir === "column" ? `${props.width}vw` : `0.2vh`;
   }};
   height: ${(props) => {
-    return props.dir == "column" ? `0.2vh` : `${props.width}vh`;
+    return props.dir === "column" ? `0.1vw` : `${props.width}vh`;
   }};
   background-color: ${(color) => `#${color.color}`};
   border-radius: 8px;
@@ -25,7 +33,7 @@ interface LineStyleProps {
   width: number;
   dir: "column" | "row";
   color: string;
-  position: string;
+  position: "static" | "absolute" | "fixed" | "relative" | "sticky";
 }
 
 /**

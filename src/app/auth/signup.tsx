@@ -3,19 +3,21 @@ import styled from "styled-components";
 import { Input } from "../../components/input";
 import { Button } from "../../components/button";
 import { Line } from "../../components/line";
+import { useNavigate } from "react-router-dom";
 
 export default function Signup() {
   let [step, setStep] = useState(0);
+  const nav = useNavigate();
 
   function clickHandler() {
     if (step < 4) setStep(step + 1);
-    else if (step == 4) window.location.href = "/signin";
+    else if (step === 4) nav("/signin");
   }
 
   return (
     <Wrapper>
       <DivWrapper>
-        {step == 4 ? (
+        {step === 4 ? (
           <SignUp5 />
         ) : (
           <Container>
@@ -28,30 +30,30 @@ export default function Signup() {
                   color="396B76"
                   position="absolute"
                 />
-                <Line width={72} dir="column" color="fff" position="absoulte" />
+                <Line width={72} dir="column" color="fff" position="absolute" />
               </Bar>
             </Header>
           </Container>
         )}
-        {step == 0 ? (
+        {step === 0 ? (
           <SignUp1 />
-        ) : step == 1 ? (
+        ) : step === 1 ? (
           <SignUp2 />
-        ) : step == 2 ? (
+        ) : step === 2 ? (
           <SignUp3 />
-        ) : step == 3 ? (
+        ) : step === 3 ? (
           <SignUp4 />
         ) : (
           <div></div>
         )}
         <Submit>
           <Button
-            text={step < 3 ? "Next" : step == 3 ? "Submit" : "Confirm"}
+            text={step < 3 ? "Next" : step === 3 ? "Submit" : "Confirm"}
             size={72}
             onClick={clickHandler}
-            color={step == 4 ? "396B76" : undefined}
-            fontColor={step == 4 ? "fff" : undefined}
-          ></Button>
+            color={step === 4 ? "396B76" : undefined}
+            fontColor={step === 4 ? "fff" : undefined}
+          />
           {step < 4 ? (
             <Description href="/signin">Already have an account?</Description>
           ) : (
@@ -83,8 +85,8 @@ const SignUp3 = () => {
 const SignUp4 = () => {
   return (
     <div>
-      <Input label="Password" />
-      <Input label="Password Confirm" />
+      <Input label="Password" type="password"/>
+      <Input label="Password Confirm" type="password" />
     </div>
   );
 };

@@ -20,7 +20,7 @@ export const Button = ({
         onClick();
       }}
       color={color}
-      fontColor={fontColor}
+      fontColor={fontColor ?? "FFF"}
     >
       {text}
     </ButtonWrapper>
@@ -38,7 +38,7 @@ const ButtonWrapper = styled.button<{
   background-color: ${(color) =>
     `#${typeof color.color == "undefined" ? "1A1D1E" : color.color}`};
   color: ${(fontColor) =>
-    `#${typeof fontColor.fontColor == "undefined" ? "396b76" : fontColor.fontColor}`};
+    `#${typeof fontColor.fontColor == undefined ? "396b76" : fontColor.fontColor}`};
   border-radius: 8px;
   margin-top: 5vh;
 `;

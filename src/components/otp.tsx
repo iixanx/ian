@@ -10,7 +10,7 @@ export const OTP = () => {
           <Service name="Github" />
           <Account name="iixanx" />
         </Info>
-        <OTP_Number />
+        <OtpNumber />
       </Container>
       <Btn>
         <Line width={50} dir="column" color="fff" position="static"/>
@@ -74,6 +74,6 @@ const Account = styled.p<{ name: string }>`
   color: #b1b1b1;
 `;
 
-const OTP_Number = styled.h1``;
+const OtpNumber = styled.h1``;
 
 const Close = styled.button``;
