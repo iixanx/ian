@@ -2,9 +2,15 @@ import { useRef, useState } from "react";
 import styled from "styled-components";
 import { Line } from "../../components/line";
 import { CommonImages } from "../../assets/common";
+import { ListComponent } from "./list";
+import OtpModal from "./otp";
+import useOpenModal from "../../hooks/useOpenModal";
 
 export default function Home() {
+  const { isOpenModal, clickModal, closeModal } = useOpenModal();
+
   const [email, setEmail] = useState("iixiixanx@gmail.com");
+  // const [otpModal, setOtpModal] = useState(false);
   const accounts = [
     { id: 1, accountFrom: "Github", accountName: "iixax" },
     { id: 2, accountFrom: "Naver", accountName: "unh1107" },
@@ -19,97 +25,34 @@ export default function Home() {
   const accountId = useRef(0);
 
   return (
-    <Wrapper>
-      <Menu>
-        <BtnWrapper src={CommonImages.Menu_Icon}/>
-      </Menu>
-      <HeaderWrapper>
-        <H1Wrapper color="396B76">Now you're sign in with</H1Wrapper>
-        <H1Wrapper color="fff">{email}</H1Wrapper>
-      </HeaderWrapper>
-      <Line dir="column" width={100} color="fff" position="static" />
-      <ListWrapper>
-        {accounts.map((acc) => (
-          <ListComponent
-            key={acc.id}
-            accountFrom={acc.accountFrom}
-            accountName={acc.accountName}
-          />
-        ))}
-      </ListWrapper>
-      <Line dir="column" width={100} color="fff" position="static" />
-    </Wrapper>
+    <>
+      <Wrapper>
+        <Menu>
+          <BtnWrapper src={CommonImages.Menu_Icon} />
+        </Menu>
+        <HeaderWrapper>
+          <H1Wrapper color="396B76">Now you're sign in with</H1Wrapper>
+          <H1Wrapper color="fff">{email}</H1Wrapper>
+        </HeaderWrapper>
+        <Line dir="column" width={100} color="fff" position="static" />
+        <ListWrapper>
+          {accounts.map((acc) => (
+            <ListComponent
+              key={acc.id}
+              accountFrom={acc.accountFrom}
+              accountName={acc.accountName}
+              onClick={() => {
+                clickModal();
+              }}
+            />
+          ))}
+        </ListWrapper>
+        <Line dir="column" width={100} color="fff" position="static" />
+      </Wrapper>
+      {isOpenModal && <OtpModal closeModal={closeModal} />}
+    </>
   );
 }
-
-const ListComponent = ({ ...props }: ListInterface) => {
-  return (
-    <ListDivWrapper>
-      <Line width={85} dir={"column"} color={"B8B8B8"} position={"static"} />
-      <WrapperWithOutLine>
-        <ListImgWrapper></ListImgWrapper>
-        <ListHeaderWrapper>
-          <ListH2Wrapper>{props.accountFrom}</ListH2Wrapper>
-          <ListH1Wrapper>{props.accountName}</ListH1Wrapper>
-        </ListHeaderWrapper>
-      </WrapperWithOutLine>
-      <Line width={85} dir={"column"} color={"B8B8B8"} position={"static"} />
-    </ListDivWrapper>
-  );
-};
-
-interface ListInterface {
-  accountFrom: string;
-  accountName: string;
-}
-
-const ListDivWrapper = styled.div`
-  border-top: 0.1vh;
-  border-bottom: 0.1vh;
-  width: 100vw;
-  height: 10.5vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
-
-const WrapperWithOutLine = styled.div`
-  flex-direction: row;
-  display: flex;
-  align-items: left;
-  padding-top: 2vh;
-  padding-bottom: 2vh;
-`
-
-const ListImgWrapper = styled.div`
-  background-color: #fff;
-  border-radius: 128px;
-  width: 12vw;
-  height: 6vh;
-  /* margin-left: 4vh; */
-  margin-right: 2.4vh;
-`;
-
-const ListHeaderWrapper = styled.div`
-  flex-direction: column;
-  display: flex;
-  padding-left: 4vw;
-`;
-
-const ListH2Wrapper = styled.h2`
-  color: #fff;
-  font-weight: 300;
-  font-size: 1.2ch;
-  margin-bottom: 1.6vh;
-`;
-
-const ListH1Wrapper = styled.h1`
-  color: #fff;
-  font-weight: 400;
-  font-size: 3.2vh;
-  min-width: 50vw;
-  max-width: 75vw;
-`;
 
 const Wrapper = styled.div`
   width: 100vw;
