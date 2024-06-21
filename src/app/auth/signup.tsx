@@ -4,108 +4,196 @@ import { Input } from "../../components/input";
 import { Button } from "../../components/button";
 import { Line } from "../../components/line";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { useForm } from "../../hooks/useForm";
+import { BASE_URL } from "../..";
 
 export default function Signup() {
   let [step, setStep] = useState(0);
+  let [info, setInfo] = useState("");
   const nav = useNavigate();
 
+  const { form, handleChange } = useForm({
+    name: "",
+    email: "",
+    password: "",
+    password_confirm: "",
+  });
+  const { name, email, password, password_confirm } = form;
+
   function clickHandler() {
-    if (step < 4) setStep(step + 1);
-    else if (step === 4) nav("/signin");
+    if (step < 3) {
+      setStep(step + 1);
+    } else if (step === 3) {
+      axios
+        .post(`${BASE_URL}/auth/signup`, {
+          name: name,
+          email: email,
+          password: password,
+        })
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((e) => {
+          console.error(e);
+        });
+      nav("/signin");
+    }
   }
+
+  function nameHandler() {
+    if (name.length < 1) setInfo("");
+    else setStep(step + 1);
+  }
+
+  function emailHandler() {}
+
+  const passwordHandler = () => {
+    if (password !== password_confirm) setInfo("Entered the wrong password");
+    else setStep(step + 1);
+  };
 
   return (
     <Wrapper>
       <DivWrapper>
-        {step === 4 ? (
-          <SignUp5 />
-        ) : (
-          <Container>
-            <Header>
-              <H1Wrapper>Sign Up</H1Wrapper>
-              <Bar>
-                <Line
-                  width={step < 5 ? 18 * step : 72}
-                  dir="column"
-                  color="396B76"
-                  position="absolute"
-                />
-                <Line width={72} dir="column" color="fff" position="absolute" />
-              </Bar>
-            </Header>
-          </Container>
-        )}
-        {step === 0 ? (
-          <SignUp1 />
-        ) : step === 1 ? (
-          <SignUp2 />
-        ) : step === 2 ? (
-          <SignUp3 />
-        ) : step === 3 ? (
-          <SignUp4 />
-        ) : (
-          <div></div>
-        )}
-        <Submit>
-          <Button
-            text={step < 3 ? "Next" : step === 3 ? "Submit" : "Confirm"}
-            size={72}
-            onClick={clickHandler}
-            color={step === 4 ? "396B76" : undefined}
-            fontColor={step === 4 ? "fff" : undefined}
+        <Container>
+          <Header>
+            <H1Wrapper>Sign Up</H1Wrapper>
+            <Bar>
+              <Line
+                width={step < 5 ? 18 * step : 72}
+                dir="column"
+                color="396B76"
+                position="absolute"
+              />
+              <Line width={72} dir="column" color="fff" position="absolute" />
+            </Bar>
+          </Header>
+        </Container>
+        <SignUp1Wrapper step={step}>
+          <Input
+            label="Name"
+            name="name"
+            value={name}
+            onChange={handleChange}
           />
-          {step < 4 ? (
-            <Description href="/signin">Already have an account?</Description>
-          ) : (
+          <Submit>
+            <Button
+              text={"Next"}
+              size={72}
+              onClick={clickHandler}
+              color={"396B76"}
+              fontColor={"fff"}
+            />
+            <Inform>{info}</Inform>
+            <Description
+              onClick={() => {
+                setInfo("");
+                nav("/signin");
+              }}
+            >
+              Already have an account?
+            </Description>
+          </Submit>
+        </SignUp1Wrapper>
+        <SignUp2Wrapper step={step}>
+          <Input
+            label="Email"
+            name="email"
+            value={email}
+            onChange={handleChange}
+          />
+          <Submit>
+            <Button
+              text={"Next"}
+              size={72}
+              onClick={clickHandler}
+              color={"396B76"}
+              fontColor={"fff"}
+            />
+            <Description onClick={() => nav("/signin")}>
+              Already have an account?
+            </Description>
+          </Submit>
+        </SignUp2Wrapper>
+        <SignUp3Wrapper step={step}>
+          <Input
+            label="Password"
+            type="password"
+            name="password"
+            value={password}
+            onChange={handleChange}
+          />
+          <Input
+            label="Password Confirm"
+            type="password"
+            name="password_confirm"
+            value={password_confirm}
+            onChange={handleChange}
+          />
+          <Inform>{info}</Inform>
+          <Submit>
+            <Button
+              text={"Submit"}
+              size={72}
+              onClick={passwordHandler}
+              color={"396B76"}
+              fontColor={"fff"}
+            />
+            <Description onClick={() => nav("/signin")}>
+              Already have an account?
+            </Description>
+          </Submit>
+        </SignUp3Wrapper>
+        <SignUp4Wrapper step={step}>
+          <AfterWrapper>
+            Congratuation! <br />
+            <br />
+            Now you
+            <br />
+            can access
+            <br />
+            our contents
+            <br />
+            after you sign in.
+          </AfterWrapper>
+          <Submit>
+            <Button
+              text={"Confirm"}
+              size={72}
+              onClick={clickHandler}
+              color={"396B76"}
+              fontColor={"fff"}
+            />
             <div></div>
-          )}
-        </Submit>
+          </Submit>
+        </SignUp4Wrapper>
       </DivWrapper>
     </Wrapper>
   );
 }
 
-const SignUp1 = () => {
-  return <Input label="Name" />;
-};
+const SignUp1Wrapper = styled.div<{ step: number }>`
+  display: ${(step) => (step.step === 0 ? "block" : "none")};
+`;
 
-const SignUp2 = () => {
-  return (
-    <div>
-      <Input label="Account" />
-      <Input label="Email" />
-    </div>
-  );
-};
+const SignUp2Wrapper = styled.div<{ step: number }>`
+  display: ${(step) => (step.step === 1 ? "block" : "none")};
+`;
 
-const SignUp3 = () => {
-  return <Input label="Authorize Number" />;
-};
+const SignUp3Wrapper = styled.div<{ step: number }>`
+  display: ${(step) => (step.step === 2 ? "block" : "none")};
+`;
 
-const SignUp4 = () => {
-  return (
-    <div>
-      <Input label="Password" type="password"/>
-      <Input label="Password Confirm" type="password" />
-    </div>
-  );
-};
+const SignUp4Wrapper = styled.div<{ step: number }>`
+  display: ${(step) => (step.step === 3 ? "block" : "none")};
+`;
 
-const SignUp5 = () => {
-  return (
-    <AfterWrapper>
-      Congratuation! <br />
-      <br />
-      Now you
-      <br />
-      can access
-      <br />
-      our contents
-      <br />
-      after you sign in.
-    </AfterWrapper>
-  );
-};
+const Inform = styled.p`
+  display: ${(info) => (info ? "block" : "none")};
+  color: #ff0000;
+  font-size: 300;
+`;
 
 const Wrapper = styled.div`
   width: 100vw;

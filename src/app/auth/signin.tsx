@@ -2,9 +2,18 @@ import styled from "styled-components";
 import { Button } from "../../components/button";
 import { Input } from "../../components/input";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { BASE_URL } from "../..";
+import { useForm } from "../../hooks/useForm";
 
 export default function Signin() {
-  const nav = useNavigate()
+  const { form, handleChange } = useForm({
+    email: "",
+    password: "",
+  });
+  const { email, password } = form;
+
+  const nav = useNavigate();
 
   return (
     <Wrapper>
@@ -14,18 +23,42 @@ export default function Signin() {
           <Line />
         </Header>
         <Form>
-          <Input label="Account" />
-          <Input label="Password" type="password" />
+          <Input
+            label="Email"
+            name="email"
+            value={email}
+            onChange={handleChange}
+          />
+          <Input
+            label="Password"
+            name="password"
+            value={password}
+            onChange={handleChange}
+            type="password"
+          />
         </Form>
         <Submit>
           <Button
             text="sign in"
             size={72}
             onClick={() => {
-              return nav("/home");
+              axios
+                .post(`${BASE_URL}/auth/signin`, {
+                  "email" : email,
+                  "password" : password,
+                })
+                .then((res) => {
+                  console.log(res);
+                  return nav("/home");
+                })
+                .catch((e) => {
+                  console.error(e);
+                });
             }}
           />
-          <Description href={`/signup`}>Don't have an account?</Description>
+          <Description onClick={() => nav("/signup")}>
+            Don't have an account?
+          </Description>
         </Submit>
       </Container>
     </Wrapper>

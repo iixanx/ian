@@ -1,26 +1,34 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { Line } from "../../components/line";
 import { CommonImages } from "../../assets/common";
-
-// interface IOtpModal {
-//   setOtpModal: React.Dispatch<React.SetStateAction<boolean>>;
-// }
+import { authenticator } from "otplib";
+import axios from "axios";
+import { BASE_URL } from "../..";
 
 type OtpModalprop = {
   closeModal?: () => void;
 };
 
 export default function OtpModal({ closeModal }: OtpModalprop) {
-  const otpModal = useRef(null);
-
   const [serviceName, setServiceName] = useState("github");
   const [accountName, setAccountName] = useState("iixanx");
+  const [otp, setOtp] = useState("");
 
-  const genOtpNumber = () => {
-    // generate OTP number logic
-    return 123456
-  }
+  let data: any;
+
+  useEffect(() => {
+    axios.get(`${BASE_URL}/otp/otp?id=${1}`).then((res) => {
+      data = res.data.data;
+
+      setServiceName(data.service);
+      setAccountName(data.account);
+    });
+  });
+
+  // useEffect(() => {
+  //   setOtp(authenticator.generate(data.secret));
+  // }, [otp]);
 
   return (
     <ModalWrap>
@@ -31,8 +39,8 @@ export default function OtpModal({ closeModal }: OtpModalprop) {
           <ServiceNameWrapper>{serviceName}</ServiceNameWrapper>
           <AccountNameWrapper>{accountName}</AccountNameWrapper>
           <GetOtpNumber>
-            <TimerWrapper src={CommonImages.Menu_Icon}/>
-            <OtpNumber>{genOtpNumber()}</OtpNumber>
+            <TimerWrapper src={CommonImages.Menu_Icon} />
+            <OtpNumber>{otp}</OtpNumber>
           </GetOtpNumber>
           <Line width={48} dir={"column"} color={"fff"} position={"static"} />
           <CloseBtn onClick={closeModal}>닫기</CloseBtn>
@@ -110,13 +118,13 @@ const GetOtpNumber = styled.div`
   justify-content: center;
   align-items: center;
   width: 64vw;
-`
+`;
 
 const TimerWrapper = styled.img`
   display: flex;
   align-items: center;
   padding: 2vh;
-`
+`;
 
 const OtpNumber = styled.h1`
   font-size: 4ch;

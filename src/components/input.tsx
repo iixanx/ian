@@ -1,12 +1,28 @@
+import { InputHTMLAttributes } from "react";
 import styled from "styled-components";
 
-export const Input = ({ label, ...props }: { label: string, type?: string }) => {
+interface InputType extends InputHTMLAttributes<HTMLInputElement> {
+  label: string;
+}
+
+export const Input = ({
+  label,
+  type = "text",
+  autoComplete = "off",
+  onChange,
+  name,
+  value
+}: InputType) => {
   return (
     <Wrapper>
       <Label>{label}</Label>
       <InputWrapper
+        onChange={onChange}
+        name={name}
+        value={value}
         placeholder={`Please enter the ${label.toLowerCase()}`}
-        type={props.type ?? 'text'}
+        type={type}
+        autoComplete={autoComplete}
       />
     </Wrapper>
   );
@@ -29,7 +45,7 @@ const Label = styled.label`
   margin-bottom: 1vh;
 `;
 
-const InputWrapper = styled.input<{type: string}>`
+const InputWrapper = styled.input<{ type: string }>`
   width: 72vw;
   height: 5vh;
   border-style: none;
