@@ -23,37 +23,37 @@ export default function Signup() {
 
   function clickHandler() {
     setInfo("");
-    if (step < 3) {
-      setStep(step + 1);
-    } else if (step === 3) {
-      axios
-        .post(`${BASE_URL}/auth/signup`, {
-          name: name,
-          email: email,
-          password: password,
-        })
-        .then((res) => {
-          console.log(res);
-        })
-        .catch((e) => {
-          console.error(e);
-        });
-      nav("/signin");
-    }
+    axios
+      .post(`${BASE_URL}/auth/signup`, {
+        name: name,
+        email: email,
+        password: password,
+      })
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((e) => {
+        console.error(e);
+      });
+    nav("/signin");
   }
 
   function nameHandler() {
-    if (name.length < 1) setInfo("");
-    else setStep(step + 1);
+    if (name.length < 1) {
+      setInfo("Name must to be required");
+    } else {
+      setInfo("");
+      setStep(step + 1);
+    }
   }
 
   function emailHandler() {
     if (!email.match(/^[a-zA-Z0-9+-\_.]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/)) {
       setInfo("Email is not valid");
     } else {
-      setInfo("")
-      setStep(step + 1)
-    };
+      setInfo("");
+      setStep(step + 1);
+    }
   }
 
   const passwordHandler = () => {
@@ -89,7 +89,7 @@ export default function Signup() {
             <Button
               text={"Next"}
               size={72}
-              onClick={clickHandler}
+              onClick={nameHandler}
               color={"396B76"}
               fontColor={"fff"}
             />
