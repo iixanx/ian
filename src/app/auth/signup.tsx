@@ -21,7 +21,7 @@ export default function Signup() {
   });
   const { name, email, password, password_confirm } = form;
 
-  function clickHandler() {
+  const clickHandler = () => {
     setInfo("");
     axios
       .post(`${BASE_URL}/auth/signup`, {
@@ -38,7 +38,7 @@ export default function Signup() {
     nav("/signin");
   }
 
-  function nameHandler() {
+  const nameHandler = () => {
     if (name.length < 1) {
       setInfo("Name must to be required");
     } else {
@@ -47,14 +47,14 @@ export default function Signup() {
     }
   }
 
-  function emailHandler() {
+  const emailHandler = () => {
     if (!email.match(/^[a-zA-Z0-9+-\_.]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/)) {
       setInfo("Email is not valid");
     } else {
       setInfo("");
       setStep(step + 1);
     }
-  }
+  };
 
   const passwordHandler = () => {
     if (password !== password_confirm) setInfo("Entered the wrong password");

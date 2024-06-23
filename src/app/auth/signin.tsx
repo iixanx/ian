@@ -5,6 +5,8 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { BASE_URL } from "../..";
 import { useForm } from "../../hooks/useForm";
+import { useState } from "react";
+import { setCookie } from "../../common/cookie";
 
 export default function Signin() {
   const { form, handleChange } = useForm({
@@ -13,7 +15,30 @@ export default function Signin() {
   });
   const { email, password } = form;
 
+  const [info, setInfo] = useState("");
+
   const nav = useNavigate();
+
+  const inputHandler = async () => {
+    if (email.length < 1 || password.length < 1) {
+      setInfo("Input length must be more than 1 characters");
+    } else {
+      axios
+        .post(`${BASE_URL}/auth/signin`, {
+          email: email,
+          password: password,
+        })
+        .then(async (res) => {
+          await setCookie(res);
+          return nav("/home");
+        })
+        .catch((e) => {
+          console.error(e);
+        });
+      setInfo("");
+      nav("/home");
+    }
+  };
 
   return (
     <Wrapper>
@@ -37,25 +62,9 @@ export default function Signin() {
             type="password"
           />
         </Form>
+        <Inform>{info}</Inform>
         <Submit>
-          <Button
-            text="sign in"
-            size={72}
-            onClick={() => {
-              axios
-                .post(`${BASE_URL}/auth/signin`, {
-                  "email" : email,
-                  "password" : password,
-                })
-                .then((res) => {
-                  console.log(res);
-                  return nav("/home");
-                })
-                .catch((e) => {
-                  console.error(e);
-                });
-            }}
-          />
+          <Button text="sign in" size={72} onClick={inputHandler} />
           <Description onClick={() => nav("/signup")}>
             Don't have an account?
           </Description>
@@ -123,4 +132,10 @@ const Description = styled.a`
   font-size: 0.5ch;
   text-align: center;
   color: #fff;
+`;
+
+const Inform = styled.p`
+  display: ${(info) => (info ? "block" : "none")};
+  color: #ff0000;
+  font-size: 300;
 `;

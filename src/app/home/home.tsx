@@ -1,28 +1,37 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { Line } from "../../components/line";
 import { CommonImages } from "../../assets/common";
 import { ListComponent } from "./list";
 import OtpModal from "./otp";
 import useOpenModal from "../../hooks/useOpenModal";
+import axios from "axios";
+import { BASE_URL } from "../..";
+import { getCookie } from "../../common/cookie";
+import { Cookies } from "react-cookie";
 
 export default function Home() {
+  const cookie = new Cookies();
+
   const { isOpenModal, clickModal, closeModal } = useOpenModal();
 
-  const [email, setEmail] = useState("iixiixanx@gmail.com");
-  // const [otpModal, setOtpModal] = useState(false);
-  const accounts = [
-    { id: 1, accountFrom: "Github", accountName: "iixax" },
-    { id: 2, accountFrom: "Naver", accountName: "unh1107" },
-    { id: 3, accountFrom: "Google", accountName: "iixiixanx" },
-    { id: 4, accountFrom: "Github", accountName: "iixax" },
-    { id: 5, accountFrom: "Naver", accountName: "unh1107" },
-    { id: 6, accountFrom: "Google", accountName: "iixiixanx" },
-    { id: 7, accountFrom: "Github", accountName: "iixax" },
-    { id: 8, accountFrom: "Naver", accountName: "unh1107" },
-    { id: 9, accountFrom: "Google", accountName: "iixiixanx" },
-  ];
-  const accountId = useRef(0);
+  const [email, setEmail] = useState("");
+  let accounts: any[] = [];
+
+  useEffect(() => {
+    axios
+      .get(`${BASE_URL}/otp`, {
+        headers: {
+          authorization: cookie.get("user"),
+        },
+      })
+      .then((res) => {
+        accounts = res.data;
+      })
+      .catch((e) => {
+        console.error(e);
+      });
+  });
 
   return (
     <>
