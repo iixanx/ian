@@ -1,17 +1,14 @@
-import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { Line } from "../../components/line";
 import { useForm } from "../../hooks/useForm";
 import axios from "axios";
 import { BASE_URL } from "../..";
-import { Cookies } from "react-cookie";
 
 type OtpModalprop = {
   closeModal: () => void;
 };
 
 export default function AddOtpModal({ closeModal }: OtpModalprop) {
-  const cookie = new Cookies();
   const { form, handleChange } = useForm({
     service: "",
     account: "",
@@ -20,17 +17,23 @@ export default function AddOtpModal({ closeModal }: OtpModalprop) {
 
   const handleCheck = () => {
     axios
-      .post(`${BASE_URL}/otp`, {
-        headers: {
-          authorization: cookie.get("user"),
-        },
-        body: {
+      .post(
+        `${BASE_URL}/otp`,
+        {
           service: service,
           account: account,
         },
+        {
+          headers: {
+            authorization: window.sessionStorage.getItem("user"),
+          },
+        }
+      )
+      .then((res) => {
+        console.log(service, account);
       })
-      .then((res) => {})
       .catch((e) => {
+        console.log(service, account);
         console.error(e);
       });
     closeModal();
@@ -41,7 +44,13 @@ export default function AddOtpModal({ closeModal }: OtpModalprop) {
       <ModalBackGround onClick={closeModal} />
       <ModalContainer>
         <Modal>
-          <H1Wrapper>Add your account</H1Wrapper>
+          <H1DivWrapper>
+            <H1Wrapper>
+              Add your
+              <br />
+              account
+            </H1Wrapper>
+          </H1DivWrapper>
           <InputSetWrapper>
             <LabelInputWrapper>
               <LabelWrapper>Service</LabelWrapper>
@@ -73,18 +82,23 @@ export default function AddOtpModal({ closeModal }: OtpModalprop) {
   );
 }
 
+const H1DivWrapper = styled.div`
+  width: 48vw;
+  align-items: left;
+`;
+
 const LineBtnWrapper = styled.div`
   flex-direction: column;
   display: flex;
   align-items: center;
   justify-content: center;
-`
+`;
 
 const H1Wrapper = styled.h1`
   color: #fff;
-  font-size: 400;
-  font-weight: 400;
-`
+  font-size: 2.5ch;
+  font-weight: 600;
+`;
 
 const ModalWrap = styled.div`
   width: 100vw;
@@ -156,13 +170,13 @@ const LabelInputWrapper = styled.div`
   height: 8vh;
   justify-content: stretch;
   margin: 0 auto;
-`
+`;
 
 const LabelWrapper = styled.p`
   font-size: 300;
   font-weight: 300;
   color: #fff;
-`
+`;
 
 const InputWrapper = styled.input`
   width: 48vw;

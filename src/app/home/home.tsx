@@ -7,13 +7,10 @@ import OtpModal from "./otp";
 import useOpenModal from "../../hooks/useOpenModal";
 import axios from "axios";
 import { BASE_URL } from "../..";
-import { Cookies } from "react-cookie";
 import useAddButton from "../../hooks/useAddButton";
 import AddOtpModal from "./addOtp";
 
 export default function Home() {
-  const cookie = new Cookies();
-
   const { isOpenModal, clickModal, closeModal } = useOpenModal();
   const { isButtonClicked, buttonClick, closeButtonModal } = useAddButton();
 
@@ -24,7 +21,7 @@ export default function Home() {
     axios
       .get(`${BASE_URL}/otp`, {
         headers: {
-          authorization: cookie.get("user"),
+          authorization: window.sessionStorage.getItem("user"),
         },
       })
       .then((res) => {
