@@ -9,6 +9,7 @@ import axios from "axios";
 import { BASE_URL } from "../..";
 import useAddButton from "../../hooks/useAddButton";
 import AddOtpModal from "./addOtp";
+import { useNavigate } from "react-router-dom";
 
 export interface Account {
   account: string;
@@ -25,20 +26,27 @@ export default function Home() {
   const [user, setUser] = useState("");
   const [accounts, setAccounts] = useState<Account[]>([]);
 
+  const nav = useNavigate();
+
   useEffect(() => {
-    axios
-      .get(`${BASE_URL}/otp`, {
-        headers: {
-          authorization: localStorage.getItem("user"),
-        },
-      })
-      .then((res) => {
-        setAccounts(res.data.data.accountList);
-        setUser(res.data.data.user.name);
-      })
-      .catch((e) => {
-        console.error(e);
-      });
+    const isLogin = localStorage.getItem("user")
+    if(isLogin) {
+      axios
+        .get(`${BASE_URL}/otp`, {
+          headers: {
+            authorization: localStorage.getItem("user"),
+          },
+        })
+        .then((res) => {
+          setAccounts(res.data.data.accountList);
+          setUser(res.data.data.user.name);
+        })
+        .catch((e) => {
+          console.error(e);
+        });
+    } else {
+      nav("/signin")
+    }
   }, []);
 
   return (
@@ -66,7 +74,7 @@ export default function Home() {
         <Line dir="column" width={100} color="fff" position="static" />
       </Wrapper>
       {isOpenModal && <OtpModal closeModal={closeModal} />}
-      {isButtonClicked && <AddOtpModal closeModal={closeButtonModal} />}
+      {isButtonClicked && <AddOtpModal closeModal={closeButtonModal} postData={setAccounts}/>}
     </>
   );
 }

@@ -30,6 +30,7 @@ export default function Signin() {
         })
         .then(async (res) => {
           await setCookie(res);
+          console.log(localStorage.getItem("user"))
           return nav("/home");
         })
         .catch((e) => {

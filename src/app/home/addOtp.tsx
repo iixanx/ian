@@ -3,12 +3,14 @@ import { Line } from "../../components/line";
 import { useForm } from "../../hooks/useForm";
 import axios from "axios";
 import { BASE_URL } from "../..";
+import { Account } from "./home";
 
 type OtpModalprop = {
   closeModal: () => void;
+  postData: React.Dispatch<React.SetStateAction<Account[]>>;
 };
 
-export default function AddOtpModal({ closeModal }: OtpModalprop) {
+export default function AddOtpModal({ closeModal, postData }: OtpModalprop) {
   const { form, handleChange } = useForm({
     service: "",
     account: "",
@@ -30,7 +32,15 @@ export default function AddOtpModal({ closeModal }: OtpModalprop) {
         }
       )
       .then((res) => {
-        console.log(service, account);
+        axios
+          .get(`${BASE_URL}/otp`, {
+            headers: {
+              authorization: localStorage.getItem("user"),
+            },
+          })
+          .then((res) => {
+            postData(res.data.data.accountList);
+          });
       })
       .catch((e) => {
         console.log(service, account);
