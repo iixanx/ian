@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Line } from "../../components/line";
 import { CommonImages } from "../../assets/common";
@@ -10,28 +10,36 @@ import { BASE_URL } from "../..";
 import useAddButton from "../../hooks/useAddButton";
 import AddOtpModal from "./addOtp";
 
+export interface Account {
+  account: string;
+  id: number;
+  secret: string;
+  service: string;
+  userId: number;
+}
+
 export default function Home() {
   const { isOpenModal, clickModal, closeModal } = useOpenModal();
   const { isButtonClicked, buttonClick, closeButtonModal } = useAddButton();
 
   const [user, setUser] = useState("");
-  let accounts: any[] = [];
+  const [accounts, setAccounts] = useState<Account[]>([]);
 
   useEffect(() => {
     axios
       .get(`${BASE_URL}/otp`, {
         headers: {
-          authorization: window.sessionStorage.getItem("user"),
+          authorization: localStorage.getItem("user"),
         },
       })
       .then((res) => {
-        accounts = res.data.data;
+        setAccounts(res.data.data.accountList);
         setUser(res.data.data.user.name);
       })
       .catch((e) => {
         console.error(e);
       });
-  });
+  }, []);
 
   return (
     <>
@@ -48,8 +56,8 @@ export default function Home() {
           {accounts.map((acc) => (
             <ListComponent
               key={acc.id}
-              accountFrom={acc.accountFrom}
-              accountName={acc.accountName}
+              accountFrom={acc.service}
+              accountName={acc.account}
               onClick={clickModal}
             />
           ))}
@@ -94,7 +102,6 @@ const H1Wrapper = styled.h1<{ color: string }>`
   color: ${(color) => `#${color.color}`};
   font-weight: 600;
   font-size: 2ch;
-  margin-bottom: 1vh;
   margin-left: 8vw;
   text-overflow: clip;
 `;

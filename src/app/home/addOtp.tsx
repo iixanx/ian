@@ -25,7 +25,7 @@ export default function AddOtpModal({ closeModal }: OtpModalprop) {
         },
         {
           headers: {
-            authorization: window.sessionStorage.getItem("user"),
+            authorization: localStorage.getItem("user"),
           },
         }
       )

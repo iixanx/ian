@@ -18,13 +18,15 @@ export default function OtpModal({ closeModal }: OtpModalprop) {
   let data: any;
 
   useEffect(() => {
-    axios.get(`${BASE_URL}/otp/otp?id=${1}`).then((res) => {
+    axios.get(`${BASE_URL}/otp/inform/${1}`).then((res) => {
       data = res.data.data;
 
       setServiceName(data.service);
       setAccountName(data.account);
+
+      setOtp(authenticator.generate(data.secret))
     });
-  });
+  }, []);
 
   // useEffect(() => {
   //   setOtp(authenticator.generate(data.secret));
