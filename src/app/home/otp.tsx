@@ -11,8 +11,8 @@ type OtpModalprop = {
 };
 
 export default function OtpModal({ closeModal }: OtpModalprop) {
-  const [serviceName, setServiceName] = useState("github");
-  const [accountName, setAccountName] = useState("iixanx");
+  const [serviceName, setServiceName] = useState("");
+  const [accountName, setAccountName] = useState("");
   const [otp, setOtp] = useState("");
 
   let data: any;

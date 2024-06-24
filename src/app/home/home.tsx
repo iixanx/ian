@@ -7,15 +7,17 @@ import OtpModal from "./otp";
 import useOpenModal from "../../hooks/useOpenModal";
 import axios from "axios";
 import { BASE_URL } from "../..";
-import { getCookie } from "../../common/cookie";
 import { Cookies } from "react-cookie";
+import useAddButton from "../../hooks/useAddButton";
+import AddOtpModal from "./addOtp";
 
 export default function Home() {
   const cookie = new Cookies();
 
   const { isOpenModal, clickModal, closeModal } = useOpenModal();
+  const { isButtonClicked, buttonClick, closeButtonModal } = useAddButton();
 
-  const [email, setEmail] = useState("");
+  const [user, setUser] = useState("");
   let accounts: any[] = [];
 
   useEffect(() => {
@@ -26,7 +28,8 @@ export default function Home() {
         },
       })
       .then((res) => {
-        accounts = res.data;
+        accounts = res.data.data;
+        setUser(res.data.data.user.name);
       })
       .catch((e) => {
         console.error(e);
@@ -41,7 +44,7 @@ export default function Home() {
         </Menu>
         <HeaderWrapper>
           <H1Wrapper color="396B76">Now you're sign in with</H1Wrapper>
-          <H1Wrapper color="fff">{email}</H1Wrapper>
+          <H1Wrapper color="fff">{user}</H1Wrapper>
         </HeaderWrapper>
         <Line dir="column" width={100} color="fff" position="static" />
         <ListWrapper>
@@ -50,15 +53,15 @@ export default function Home() {
               key={acc.id}
               accountFrom={acc.accountFrom}
               accountName={acc.accountName}
-              onClick={() => {
-                clickModal();
-              }}
+              onClick={clickModal}
             />
           ))}
         </ListWrapper>
+        <FloatButton onClick={buttonClick} />
         <Line dir="column" width={100} color="fff" position="static" />
       </Wrapper>
       {isOpenModal && <OtpModal closeModal={closeModal} />}
+      {isButtonClicked && <AddOtpModal closeModal={closeButtonModal} />}
     </>
   );
 }
@@ -104,4 +107,15 @@ const ListWrapper = styled.div`
   height: 62vh;
   width: 100vw;
   overflow: auto;
+`;
+
+const FloatButton = styled.button`
+  width: 10vw;
+  height: 10vw;
+  border-radius: 128px;
+  background-color: #fff;
+  position: fixed;
+  margin-left: 80vw;
+  margin-top: 64vh;
+  /* margin: 80vh 12vw 12vh 82vw; //top, right, bottom, left */
 `;
