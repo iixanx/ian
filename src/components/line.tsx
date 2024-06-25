@@ -17,7 +17,7 @@ export const Line = ({ width, dir, color, position }: LineStyleProps) => {
 const LineStyle = styled.div<LineStyleProps>`
   flex-direction: ${(dir) => `${dir.dir}`};
   width: ${(props) => {
-    return props.dir === "column" ? `${props.width}vw` : `0.2vh`;
+    return props.dir === "column" ? `${props.width}vw` : `0.1vw`;
   }};
   height: ${(props) => {
     return props.dir === "column" ? `0.1vw` : `${props.width}vh`;

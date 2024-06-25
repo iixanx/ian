@@ -1,12 +1,12 @@
 import { useState } from "react";
 
 export default function useOpenModal() {
-  const [isOpenModal, setIsOpenModal] = useState(false);
+  const [isOpenModal, setIsOpenModal] = useState<number | null>(null);
   const clickModal = () => {
-    setIsOpenModal(true);
+    setIsOpenModal(1);
   };
   const closeModal = () => {
-    setIsOpenModal(false);
+    setIsOpenModal(null);
   };
   return { isOpenModal, clickModal, closeModal };
 }

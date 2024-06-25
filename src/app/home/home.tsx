@@ -25,6 +25,7 @@ export default function Home() {
 
   const [user, setUser] = useState("");
   const [accounts, setAccounts] = useState<Account[]>([]);
+  const [now, setNow] = useState<number>(0);
 
   const nav = useNavigate();
 
@@ -64,16 +65,18 @@ export default function Home() {
           {accounts.map((acc) => (
             <ListComponent
               key={acc.id}
+              otpId={acc.id}
               accountFrom={acc.service}
               accountName={acc.account}
               onClick={clickModal}
+              postData={setAccounts}
             />
           ))}
         </ListWrapper>
         <FloatButton onClick={buttonClick} />
         <Line dir="column" width={100} color="fff" position="static" />
       </Wrapper>
-      {isOpenModal && <OtpModal closeModal={closeModal} />}
+      {isOpenModal && <OtpModal otpId={Number(isOpenModal)} closeModal={closeModal} />}
       {isButtonClicked && <AddOtpModal closeModal={closeButtonModal} postData={setAccounts}/>}
     </>
   );

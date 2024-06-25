@@ -7,30 +7,30 @@ import axios from "axios";
 import { BASE_URL } from "../..";
 
 type OtpModalprop = {
+  otpId: number;
   closeModal?: () => void;
 };
 
-export default function OtpModal({ closeModal }: OtpModalprop) {
+export default function OtpModal({ otpId, closeModal }: OtpModalprop) {
   const [serviceName, setServiceName] = useState("");
   const [accountName, setAccountName] = useState("");
   const [otp, setOtp] = useState("");
 
-  let data: any;
-
   useEffect(() => {
-    axios.get(`${BASE_URL}/otp/inform/${1}`).then((res) => {
-      data = res.data.data;
+    axios
+      .get(`${BASE_URL}/otp/inform/${otpId}`, {
+        headers: {
+          authorization: localStorage.getItem("user"),
+        },
+      })
+      .then((res) => {
+        const { service, account, secret } = res.data.data;
 
-      setServiceName(data.service);
-      setAccountName(data.account);
-
-      setOtp(authenticator.generate(data.secret))
-    });
+        setServiceName(service);
+        setAccountName(account);
+        setOtp(authenticator.generate(secret));
+      });
   }, []);
-
-  // useEffect(() => {
-  //   setOtp(authenticator.generate(data.secret));
-  // }, [otp]);
 
   return (
     <ModalWrap>
