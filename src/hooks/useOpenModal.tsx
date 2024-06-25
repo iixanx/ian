@@ -8,5 +8,5 @@ export default function useOpenModal() {
   const closeModal = () => {
     setIsOpenModal(null);
   };
-  return { isOpenModal, clickModal, closeModal };
+  return { isOpenModal, setIsOpenModal, clickModal, closeModal };
 }

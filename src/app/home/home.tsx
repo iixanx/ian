@@ -20,7 +20,7 @@ export interface Account {
 }
 
 export default function Home() {
-  const { isOpenModal, clickModal, closeModal } = useOpenModal();
+  const { isOpenModal, setIsOpenModal, clickModal, closeModal } = useOpenModal();
   const { isButtonClicked, buttonClick, closeButtonModal } = useAddButton();
 
   const [user, setUser] = useState("");
@@ -30,8 +30,8 @@ export default function Home() {
   const nav = useNavigate();
 
   useEffect(() => {
-    const isLogin = localStorage.getItem("user")
-    if(isLogin) {
+    const isLogin = localStorage.getItem("user");
+    if (isLogin) {
       axios
         .get(`${BASE_URL}/otp`, {
           headers: {
@@ -46,7 +46,7 @@ export default function Home() {
           console.error(e);
         });
     } else {
-      nav("/signin")
+      nav("/signin");
     }
   }, []);
 
@@ -62,22 +62,29 @@ export default function Home() {
         </HeaderWrapper>
         <Line dir="column" width={100} color="fff" position="static" />
         <ListWrapper>
-          {accounts.map((acc) => (
-            <ListComponent
-              key={acc.id}
-              otpId={acc.id}
-              accountFrom={acc.service}
-              accountName={acc.account}
-              onClick={clickModal}
-              postData={setAccounts}
-            />
-          ))}
+          {accounts.map((acc) => {
+            const handleClick = () => setIsOpenModal(acc.id)
+            return (
+              <ListComponent
+                key={acc.id}
+                otpId={acc.id}
+                accountFrom={acc.service}
+                accountName={acc.account}
+                onClick={handleClick}
+                postData={setAccounts}
+              />
+            );
+          })}
         </ListWrapper>
         <FloatButton onClick={buttonClick} />
         <Line dir="column" width={100} color="fff" position="static" />
       </Wrapper>
-      {isOpenModal && <OtpModal otpId={Number(isOpenModal)} closeModal={closeModal} />}
-      {isButtonClicked && <AddOtpModal closeModal={closeButtonModal} postData={setAccounts}/>}
+      {isOpenModal && (
+        <OtpModal otpId={Number(isOpenModal)} closeModal={closeModal} />
+      )}
+      {isButtonClicked && (
+        <AddOtpModal closeModal={closeButtonModal} postData={setAccounts} />
+      )}
     </>
   );
 }
